@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inicio - Aprende Zapoteco de Chichicapan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0f766e;
+            --primary-hover: #0d9488;
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg-body); color: var(--text-main); line-height: 1.6; }
+        .container { max-width: 800px; margin: 0 auto; padding: 2rem 1rem; }
+
+        /* Header & Navigation */
+        header { text-align: center; margin-bottom: 2rem; }
+        header h1 { font-size: 2.5rem; color: var(--primary); margin-bottom: 0.5rem; }
+        .nav-tabs { display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem; }
+        .tab-btn { display: inline-block; background: var(--bg-card); border: 2px solid var(--border); padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; color: var(--text-main); text-decoration: none; }
+        .tab-btn:hover { border-color: var(--primary); }
+        .tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+        /* Content Box */
+        .content-box { background: var(--bg-card); padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); border: 1px solid var(--border); }
+        h2 { margin-bottom: 1rem; color: var(--text-main); margin-top: 1.5rem; }
+        h2:first-child { margin-top: 0; }
+        p { margin-bottom: 1rem; color: var(--text-muted); }
+        ul { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); }
+        a.resource-link { color: var(--primary); text-decoration: none; font-weight: 600; }
+        a.resource-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Diidzaj: Zapoteco de Chichicapan</h1>
+        <p>Plataforma de aprendizaje y preservación lingüística</p>
+    </header>
+
+    <nav class="nav-tabs">
+        <a href="index.html" class="tab-btn active">Inicio e Información</a>
+        <a href="exercises.html" class="tab-btn">Ejercicios de Vocabulario</a>
+    </nav>
+
+    <main class="content-box">
+        <h2>Sobre el Zapoteco de Chichicapan</h2>
+        <p>El zapoteco es una macrolengua perteneciente a la familia lingüística otomangue. Esta variante específica se habla principalmente en los Valles Centrales del estado de Oaxaca, México.</p>
+        <p>Al igual que otras lenguas de la misma familia, el zapoteco es una lengua tonal, lo que significa que el tono o la inflexión de voz utilizados al pronunciar una sílaba pueden cambiar por completo el significado de la palabra.</p>
+
+        <h2>Recursos en Línea</h2>
+        <ul>
+            <li><a href="https://ticha.haverford.edu/es/" target="_blank" class="resource-link">Proyecto Ticha (Haverford College)</a> - Un explorador de textos digitales de documentos coloniales zapotecos.</li>
+            <li><a href="https://glottolog.org/resource/languoid/id/zapo1243" target="_blank" class="resource-link">Glottolog: Zapotec</a> - Base de datos bibliográfica completa de referencias lingüísticas del mundo.</li>
+            <li><a href="https://mexico.sil.org/es/lengua_cultura/zapoteca" target="_blank" class="resource-link">SIL México (Instituto Lingüístico de Verano)</a> - Recursos, gramáticas y diccionarios de las lenguas indígenas de México.</li>
+        </ul>
+    </main>
+</div>
+
+</body>
+</html>
