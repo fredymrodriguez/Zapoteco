@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zapoteco Interactivo · Plataforma de Aprendizaje A1-A2-B1</title>
+    <meta name="description" content="Plataforma interactiva de libre acceso para el aprendizaje del Zapoteco de Chichicapan. 120 unidades pedagógicas y 600 ejercicios." />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-hover: #172554;
+            --primary-light: #eff6ff;
+            --secondary: #c2410c;
+            --secondary-hover: #9a3412;
+            --secondary-light: #fff7ed;
+            --accent: #d97706;
+            
+            --success: #16a34a;
+            --success-light: #f0fdf4;
+            --success-border: #bbf7d0;
+            --error: #dc2626;
+            --error-light: #fef2f2;
+            --error-border: #fecaca;
+            
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --bg-subtle: #f1f5f9;
+            --bg-overlay: rgba(15, 23, 42, 0.65);
+            
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --text-light: #94a3b8;
+            --border-color: #e2e8f0;
+            --border-hover: #cbd5e1;
+            
+            --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.04);
+            --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.08);
+            --shadow-lg: 0 16px 40px rgba(15, 23, 42, 0.12);
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 22px;
+            --radius-full: 9999px;
+            
+            --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+            --font-heading: 'Outfit', sans-serif;
+            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.dark-theme {
+            --bg-body: #090d16;
+            --bg-card: #131b2e;
+            --bg-subtle: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --text-light: #64748b;
+            --border-color: #334155;
+            --border-hover: #475569;
+            --primary-light: #1e293b;
+            --secondary-light: #2c1a14;
+            --success-light: #062e1b;
+            --error-light: #381212;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
+            --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
+            --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a { color: var(--primary); text-decoration: none; transition: var(--transition); }
+        a:hover { color: var(--secondary); }
+
+        .container { max-width: 1080px; width: 100%; margin: 0 auto; padding: 0 1.25rem; }
+
+        /* ─── HEADER ─── */
+        .top-banner {
+            background: linear-gradient(135deg, #1e3a8a 0%, #172554 60%, #0f172a 100%);
+            color: #ffffff;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 4px solid var(--secondary);
+        }
+        .header-content { padding: 2.2rem 0 1.8rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem; }
+        .brand-block h1 { font-family: var(--font-heading); font-size: 2.1rem; font-weight: 800; display: flex; align-items: center; gap: 0.6rem; }
+        .brand-block h1 span.highlight { color: #fdba74; }
+        .brand-badges { display: inline-flex; gap: 0.4rem; margin-left: 0.5rem; }
+        .level-chip-mini { font-size: 0.72rem; font-weight: 800; padding: 0.15rem 0.55rem; border-radius: var(--radius-full); color: #ffffff; }
+        .chip-a1 { background: #3b82f6; }
+        .chip-a2 { background: #f97316; }
+        .chip-b1 { background: #10b981; }
+        .brand-subtitle { color: #cbd5e1; font-size: 0.98rem; margin-top: 0.35rem; max-width: 620px; }
+        
+        .header-stats { display: flex; align-items: center; gap: 0.85rem; flex-wrap: wrap; }
+        .stat-pill { background: rgba(255, 255, 255, 0.12); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.2); padding: 0.45rem 1rem; border-radius: var(--radius-full); display: flex; align-items: center; gap: 0.5rem; font-size: 0.88rem; font-weight: 600; }
+        .icon-btn { background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.25); color: #ffffff; width: 38px; height: 38px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: var(--transition); font-size: 1.05rem; }
+        .icon-btn:hover { background: rgba(255, 255, 255, 0.3); transform: scale(1.05); }
+
+        /* ─── NAVIGATION TABS ─── */
+        .nav-tabs-bar { background: var(--bg-card); border-bottom: 1px solid var(--border-color); box-shadow: var(--shadow-sm); position: sticky; top: 0; z-index: 100; }
+        .nav-tabs { display: flex; align-items: center; gap: 0.5rem; overflow-x: auto; padding: 0.5rem 0; scrollbar-width: none; }
+        .nav-tabs::-webkit-scrollbar { display: none; }
+        .tab-btn { background: transparent; border: none; padding: 0.65rem 1.25rem; font-family: var(--font-sans); font-size: 0.92rem; font-weight: 600; color: var(--text-muted); border-radius: var(--radius-full); cursor: pointer; display: flex; align-items: center; gap: 0.5rem; white-space: nowrap; transition: var(--transition); }
+        .tab-btn:hover { color: var(--primary); background: var(--primary-light); }
+        .tab-btn.active { background: var(--primary); color: #ffffff; box-shadow: 0 4px 12px rgba(30, 58, 138, 0.25); }
+
+        /* ─── MAIN CONTENT ─── */
+        .main-content { padding: 1.75rem 0 3rem; flex: 1; }
+        .view-panel { display: none; animation: fadeIn 0.25s ease-in-out; }
+        .view-panel.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ─── CONTROLS ─── */
+        .filter-controls { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; }
+        .level-toggles { display: flex; background: var(--bg-subtle); padding: 0.25rem; border-radius: var(--radius-full); border: 1px solid var(--border-color); flex-wrap: wrap; gap: 0.25rem; }
+        .lvl-toggle-btn { background: transparent; border: none; padding: 0.45rem 1.1rem; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); border-radius: var(--radius-full); cursor: pointer; transition: var(--transition); }
+        .lvl-toggle-btn.active { background: var(--bg-card); color: var(--text-main); box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08); }
+        
+        .search-box { position: relative; min-width: 260px; }
+        .search-box input { width: 100%; padding: 0.5rem 1rem 0.5rem 2.4rem; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-main); border-radius: var(--radius-full); font-size: 0.88rem; outline: none; }
+        .search-box input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.15); }
+        .search-box .search-icon { position: absolute; left: 0.9rem; top: 50%; transform: translateY(-50%); color: var(--text-light); }
+
+        /* ─── UNITS GRID ─── */
+        .units-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .unit-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.25rem; cursor: pointer; transition: var(--transition); position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; }
+        .unit-card:hover { transform: translateY(-3px); border-color: var(--primary); box-shadow: var(--shadow-md); }
+        .unit-card::before { content: ""; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--primary); opacity: 0; transition: var(--transition); }
+        .unit-card.level-a2::before { background: var(--secondary); }
+        .unit-card.level-b1::before { background: var(--accent); }
+        .unit-card:hover::before { opacity: 1; }
+
+        .unit-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; }
+        .unit-tag { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; padding: 0.2rem 0.6rem; border-radius: var(--radius-full); background: var(--primary-light); color: var(--primary); }
+        .unit-card.level-a2 .unit-tag { background: var(--secondary-light); color: var(--secondary); }
+        .unit-card.level-b1 .unit-tag { background: var(--accent-light); color: var(--accent); }
+        .unit-title { font-family: var(--font-heading); font-size: 1.05rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.35rem; line-height: 1.35; }
+        .unit-desc { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem; flex-grow: 1; }
+        .unit-meta { display: flex; justify-content: space-between; align-items: center; padding-top: 0.75rem; border-top: 1px solid var(--border-color); font-size: 0.78rem; color: var(--text-light); font-weight: 600; }
+
+        /* ─── EXERCISE WORKSPACE ─── */
+        .exercise-card { background: var(--bg-card); border-radius: var(--radius-lg); box-shadow: var(--shadow-md); border: 1px solid var(--border-color); padding: 2rem 2.2rem; }
+        .card-topbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.25rem; }
+        .breadcrumbs { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
+        .progress-meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.82rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.45rem; }
+        .progress-track { height: 8px; background: var(--bg-subtle); border-radius: var(--radius-full); overflow: hidden; margin-bottom: 1.75rem; }
+        .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: var(--radius-full); transition: width 0.3s ease; }
+
+        .question-box { font-family: var(--font-heading); font-size: 1.35rem; font-weight: 700; color: var(--text-main); line-height: 1.45; margin-bottom: 1.75rem; padding: 1.25rem 1.4rem; background: var(--bg-subtle); border-left: 5px solid var(--primary); border-radius: var(--radius-sm); }
+        .options-list { display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 1.75rem; }
+        .option-item { background: var(--bg-card); border: 2px solid var(--border-color); border-radius: var(--radius-md); padding: 1rem 1.25rem; font-size: 1rem; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 1rem; transition: var(--transition); }
+        .option-item:hover:not(.disabled) { border-color: var(--primary); background: var(--primary-light); transform: translateX(4px); }
+        .option-key { display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; border-radius: 50%; background: var(--bg-subtle); font-weight: 700; font-size: 0.85rem; color: var(--text-muted); flex-shrink: 0; }
+        .option-text { flex-grow: 1; }
+
+        .option-item.selected-correct { border-color: var(--success); background: var(--success-light); color: #14532d; font-weight: 600; }
+        .option-item.selected-correct .option-key { background: var(--success); color: #ffffff; }
+        .option-item.selected-wrong { border-color: var(--error); background: var(--error-light); color: #7f1d1d; font-weight: 600; }
+        .option-item.selected-wrong .option-key { background: var(--error); color: #ffffff; }
+        .option-item.show-correct { border-color: var(--success); background: var(--success-light); color: #14532d; }
+        .option-item.show-correct .option-key { background: var(--success); color: #ffffff; }
+        .option-item.disabled { cursor: default; opacity: 0.9; }
+
+        .feedback-card { border-radius: var(--radius-md); padding: 1.25rem 1.4rem; margin-bottom: 1.75rem; display: none; line-height: 1.55; }
+        .feedback-card.correct { background: var(--success-light); border: 1px solid var(--success-border); color: #14532d; display: block; }
+        .feedback-card.wrong { background: var(--error-light); border: 1px solid var(--error-border); color: #7f1d1d; display: block; }
+        .feedback-header { font-weight: 800; font-size: 1.05rem; margin-bottom: 0.35rem; }
+
+        .action-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        .btn { padding: 0.75rem 1.6rem; font-family: var(--font-sans); font-size: 0.95rem; font-weight: 700; border-radius: var(--radius-full); border: none; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; transition: var(--transition); }
+        .btn-secondary { background: var(--bg-subtle); color: var(--text-main); border: 1px solid var(--border-color); }
+        .btn-secondary:hover:not(:disabled) { background: var(--border-hover); transform: translateY(-1px); }
+        .btn-primary { background: var(--primary); color: #ffffff; box-shadow: 0 4px 14px rgba(30, 58, 138, 0.25); }
+        .btn-primary:hover:not(:disabled) { background: var(--primary-hover); transform: translateY(-1px); }
+        .btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
+
+        /* ─── ABOUT PAGE ─── */
+        .about-card { background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border-color); box-shadow: var(--shadow-md); padding: 2.5rem; margin-bottom: 2rem; }
+        .about-header h2 { font-family: var(--font-heading); font-size: 1.85rem; color: var(--text-main); margin-bottom: 0.5rem; }
+        .about-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
+        .about-item { background: var(--bg-subtle); padding: 1.5rem; border-radius: var(--radius-md); border-left: 4px solid var(--secondary); }
+        .about-item h3 { font-family: var(--font-heading); font-size: 1.15rem; margin-bottom: 0.5rem; }
+        .about-item p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.55; }
+
+        /* ─── MODAL ─── */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-overlay); backdrop-filter: blur(6px); z-index: 1000; display: none; justify-content: center; align-items: center; padding: 1.25rem; }
+        .modal-overlay.open { display: flex; animation: fadeIn 0.25s ease-out; }
+        .modal-card { background: var(--bg-card); border-radius: var(--radius-lg); max-width: 540px; width: 100%; padding: 2.5rem; text-align: center; box-shadow: var(--shadow-lg); }
+        .modal-icon { font-size: 4rem; margin-bottom: 1rem; }
+        .modal-card h2 { font-family: var(--font-heading); font-size: 1.85rem; margin-bottom: 0.5rem; }
+        .modal-score { font-size: 2.75rem; font-weight: 800; color: var(--primary); margin: 1rem 0; }
+    </style>
+</head>
+<body>
+
+    <header class="top-banner">
+        <div class="container header-content">
+            <div class="brand-block">
+                <h1>🗣️ Zapoteco <span class="highlight">Interactivo</span>
+                    <span class="brand-badges">
+                        <span class="level-chip-mini chip-a1">A1</span>
+                        <span class="level-chip-mini chip-a2">A2</span>
+                        <span class="level-chip-mini chip-b1">B1</span>
+                    </span>
+                </h1>
+                <p class="brand-subtitle">Plataforma interactiva de libre acceso para el aprendizaje del Zapoteco de Chichicapan</p>
+            </div>
+            <div class="header-stats">
+                <div class="stat-pill" title="Aciertos globales">✅ <span id="accuracyDisplay">0 / 600</span></div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="nav-tabs-bar">
+        <div class="container nav-tabs">
+            <button class="tab-btn active" data-view="curriculumView">📚 Unidades de Estudio</button>
+            <button class="tab-btn" data-view="quizWorkspaceView">✍️ Práctica Interactiva</button>
+            <button class="tab-btn" data-view="aboutView">ℹ️ Metodología</button>
+        </div>
+    </nav>
+
+    <main class="main-content container">
+        
+        <!-- VISTA 1: MENÚ DE UNIDADES -->
+        <section id="curriculumView" class="view-panel active">
+            <div class="filter-controls">
+                <div class="level-toggles">
+                    <button class="lvl-toggle-btn active" data-lvl="all">Todos</button>
+                    <button class="lvl-toggle-btn" data-lvl="A1">A1 (1-40)</button>
+                    <button class="lvl-toggle-btn" data-lvl="A2">A2 (41-80)</button>
+                    <button class="lvl-toggle-btn" data-lvl="B1">B1 (81-120)</button>
+                </div>
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="unitSearchInput" placeholder="Buscar unidad o tema..." />
+                </div>
+            </div>
+            
+            <div class="units-grid" id="unitsGridContainer">
+                <p style="grid-column: 1/-1; color: var(--text-muted);">Cargando módulos de la base de datos...</p>
+            </div>
+        </section>
+
+        <!-- VISTA 2: ÁREA DE EJERCICIOS -->
+        <section id="quizWorkspaceView" class="view-panel">
+            <div class="exercise-card">
+                <div class="card-topbar">
+                    <div class="breadcrumbs">
+                        <span id="cardLevelTag" class="unit-tag">NIVEL</span>
+                        <span class="sep">/</span>
+                        <span id="cardUnitTitle" style="font-weight: 700;">Selecciona una unidad</span>
+                    </div>
+                    <button class="btn btn-secondary" onclick="switchView('curriculumView')" style="padding: 0.35rem 0.85rem; font-size: 0.8rem;">
+                        📑 Volver al Menú
+                    </button>
+                </div>
+                
+                <div class="workspace-progress">
+                    <div class="progress-meta">
+                        <span id="workspaceProgressText">Progreso: 0 / 0</span>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill" id="workspaceProgressBar" style="width: 0%;"></div>
+                    </div>
+                </div>
+
+                <div class="question-box" id="questionText">Ve a la pestaña "Unidades de Estudio" y selecciona una lección para empezar.</div>
+                
+                <div class="options-list" id="optionsContainer"></div>
+
+                <div class="feedback-card" id="feedbackCard">
+                    <div class="feedback-header" id="feedbackHeader"></div>
+                    <div class="feedback-body" id="feedbackBody"></div>
+                </div>
+
+                <div class="action-row" style="justify-content: flex-end;">
+                    <button class="btn btn-primary" id="nextExerciseBtn" disabled>Siguiente ▶</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- VISTA 3: ACERCA DE -->
+        <section id="aboutView" class="view-panel">
+            <div class="about-card">
+                <div class="about-header">
+                    <h2>Acerca del Proyecto · Arquitectura Modular</h2>
+                    <p style="color: var(--text-muted); font-size: 1.05rem;">Plataforma estructurada para alojar 600 ejercicios de forma escalable.</p>
+                </div>
+                <div class="about-grid">
+                    <div class="about-item">
+                        <h3>📖 Estructura de Base de Datos Separada</h3>
+                        <p>Los ejercicios están divididos en archivos independientes (database_a1.js, database_a2.js, database_b1.js). Esto previene que el navegador colapse y aísla los errores de sintaxis.</p>
+                    </div>
+                    <div class="about-item">
+                        <h3>🎓 Motor Adaptador Interno</h3>
+                        <p>El código <code>index.html</code> cuenta con un motor que lee tu formato <code>ex(...)</code> personalizado y lo adapta automáticamente a la interfaz, calculando los IDs de unidad en bloques de 5 ejercicios.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL FINAL -->
+    <div class="modal-overlay" id="celebrationModal">
+        <div class="modal-card">
+            <div class="modal-icon">🎉</div>
+            <h2 id="modalTitle">¡Unidad Completada!</h2>
+            <div class="modal-score" id="modalScoreText">0/0</div>
+            <button class="btn btn-primary" onclick="cerrarModal()" style="width: 100%; margin-top: 1rem;">Volver al Menú</button>
+        </div>
+    </div>
+
+    <!-- ======================================================= -->
+    <!-- 1. MOTOR ADAPTADOR Y DECLARACIÓN DE VARIABLES GLOBALES  -->
+    <!-- ======================================================= -->
+    <script>
+        const UNITS_META = [];
+        const EXERCISES_DATA = [];
+
+        // Este objeto intercepta el "exercises.push" que usas en tus archivos .js
+        const exercises = {
+            push: function(obj) {
+                EXERCISES_DATA.push(obj);
+            }
+        };
+
+        // Tu formato personalizado convertido para el sistema
+        function ex(idGlobal, unitName, title, question, opts, correctLabel, feedback) {
+            // Calcula matemáticamente a qué unidad pertenece (bloques de 5)
+            const unitId = Math.ceil(idGlobal / 5); 
+            
+            let levelAssigned = "A1";
+            if (unitId > 40 && unitId <= 80) levelAssigned = "A2";
+            if (unitId > 80) levelAssigned = "B1";
+
+            // Crea la metadata de la unidad si no existe aún
+            if (!UNITS_META.find(u => u.id === unitId)) {
+                UNITS_META.push({
+                    id: unitId,
+                    level: levelAssigned,
+                    title: `Unidad ${unitId}: ${unitName}`,
+                    desc: title
+                });
+            }
+
+            // Formatea las opciones para la interfaz
+            const letters = ['a', 'b', 'c', 'd'];
+            const options = opts.map((t, i) => ({
+                id: letters[i],
+                text: t.replace(/^[a-d][\.\)]\s*/, '').trim(),
+                isCorrect: letters[i] === correctLabel
+            }));
+
+            return {
+                globalId: idGlobal,
+                unitId: unitId,
+                question: question,
+                options: options,
+                feedbackCorrect: feedback,
+                feedbackWrong: `La respuesta correcta era la ${correctLabel.toUpperCase()}. ${feedback.replace('✅ ', '')}`
+            };
+        }
+    </script>
+
+    <!-- ======================================================= -->
+    <!-- 2. LLAMADA A TUS ARCHIVOS EXTERNOS DE BASE DE DATOS     -->
+    <!-- (El sistema ignorará silenciosamente los que aún no existan) -->
+    <!-- ======================================================= -->
+    <script src="database_a1.js"></script>
+    <script src="database_a2.js"></script>
+    <script src="database_b1.js"></script>
+    <script src="database_b2.js"></script>
+
+    <!-- ======================================================= -->
+    <!-- 3. LÓGICA VISUAL DE LA INTERFAZ                         -->
+    <!-- ======================================================= -->
+    <script>
+        // ESTADO DE LA APLICACIÓN
+        let currentFilter = 'all';
+        let searchQuery = '';
+        let currentUnitExercises = [];
+        let currentExIndex = 0;
+        let correctAnswers = 0;
+        let globalCorrectAnswers = 0;
+        let isAnswered = false;
+
+        // FUNCIONES DE INTERFAZ
+        window.switchView = function(viewId) {
+            document.querySelectorAll('.view-panel').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+            
+            const tabBtn = document.querySelector(`.tab-btn[data-view="${viewId}"]`);
+            if(tabBtn) tabBtn.classList.add('active');
+            
+            if (viewId === 'curriculumView') renderUnitsGrid();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        // NAVEGACIÓN Y FILTROS
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => switchView(e.currentTarget.getAttribute('data-view')));
+        });
+
+        document.querySelectorAll('.lvl-toggle-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.lvl-toggle-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                currentFilter = e.target.getAttribute('data-lvl');
+                renderUnitsGrid();
+            });
+        });
+
+        document.getElementById('unitSearchInput').addEventListener('input', (e) => {
+            searchQuery = e.target.value.toLowerCase();
+            renderUnitsGrid();
+        });
+
+        // RENDERIZAR GRID DE UNIDADES
+        function renderUnitsGrid() {
+            const grid = document.getElementById('unitsGridContainer');
+            
+            if (UNITS_META.length === 0) {
+                grid.innerHTML = '<p style="grid-column: 1/-1; color: var(--error);">No se han detectado ejercicios. Asegúrate de haber subido los archivos database_a1.js, etc.</p>';
+                return;
+            }
+
+            const filteredUnits = UNITS_META.filter(u => {
+                const matchLevel = (currentFilter === 'all' || u.level === currentFilter);
+                const matchSearch = u.title.toLowerCase().includes(searchQuery) || u.desc.toLowerCase().includes(searchQuery);
+                return matchLevel && matchSearch;
+            });
+
+            if (filteredUnits.length === 0) {
+                grid.innerHTML = '<p style="grid-column: 1/-1; color: var(--text-muted);">No se encontraron unidades.</p>';
+                return;
+            }
+
+            grid.innerHTML = filteredUnits.map(u => {
+                const exCount = EXERCISES_DATA.filter(e => e.unitId === u.id).length;
+                return `
+                <div class="unit-card level-${u.level.toLowerCase()}" onclick="startUnit(${u.id})">
+                    <div class="unit-header">
+                        <span class="unit-tag">NIVEL ${u.level}</span>
+                    </div>
+                    <h3 class="unit-title">${u.title}</h3>
+                    <p class="unit-desc">${u.desc}</p>
+                    <div class="unit-meta">
+                        <span>${exCount} Ejercicios</span>
+                        <span style="color: var(--primary);">Practicar ▶</span>
+                    </div>
+                </div>
+            `}).join('');
+            
+            // Actualizar total en interfaz
+            document.getElementById('accuracyDisplay').innerText = `${globalCorrectAnswers} / ${EXERCISES_DATA.length}`;
+        }
+
+        // MOTOR DE EJERCICIOS
+        window.startUnit = function(id) {
+            const unit = UNITS_META.find(u => u.id === id);
+            currentUnitExercises = EXERCISES_DATA.filter(e => e.unitId === id);
+            currentExIndex = 0;
+            correctAnswers = 0;
+
+            document.getElementById('cardLevelTag').innerText = `NIVEL ${unit.level}`;
+            document.getElementById('cardUnitTitle').innerText = unit.title;
+            
+            switchView('quizWorkspaceView');
+            showQuestion();
+        };
+
+        function showQuestion() {
+            if (currentExIndex >= currentUnitExercises.length) {
+                endUnit();
+                return;
+            }
+
+            isAnswered = false;
+            const ex = currentUnitExercises[currentExIndex];
+            const currentStep = currentExIndex + 1;
+            const totalSteps = currentUnitExercises.length;
+
+            document.getElementById('workspaceProgressText').innerText = `Ejercicio ${currentStep} de ${totalSteps}`;
+            const percent = Math.round(((currentStep - 1) / totalSteps) * 100);
+            document.getElementById('workspaceProgressBar').style.width = `${percent}%`;
+
+            document.getElementById('feedbackCard').style.display = 'none';
+            document.getElementById('btnNext').disabled = true;
+            document.getElementById('btnNext').innerText = (currentStep === totalSteps) ? "Finalizar Unidad ▶" : "Siguiente ▶";
+
+            document.getElementById('questionText').innerText = ex.question;
+            document.getElementById('optionsContainer').innerHTML = ex.options.map(opt => `
+                <div class="option-item" onclick="checkAnswer('${opt.id}', this)">
+                    <div class="option-key">${opt.id.toUpperCase()}</div>
+                    <div class="option-text">${opt.text}</div>
+                </div>
+            `).join('');
+        }
+
+        window.checkAnswer = function(selectedId, htmlElement) {
+            if (isAnswered) return;
+            isAnswered = true;
+
+            const ex = currentUnitExercises[currentExIndex];
+            const isCorrect = ex.options.find(o => o.id === selectedId).isCorrect;
+
+            document.querySelectorAll('.option-item').forEach(el => el.classList.add('disabled'));
+
+            const feedbackCard = document.getElementById('feedbackCard');
+            const feedbackHeader = document.getElementById('feedbackHeader');
+            const feedbackBody = document.getElementById('feedbackBody');
+
+            if (isCorrect) {
+                htmlElement.classList.add('selected-correct');
+                feedbackCard.className = 'feedback-card correct';
+                feedbackHeader.innerText = "✅ ¡Correcto!";
+                feedbackBody.innerText = ex.feedbackCorrect;
+                correctAnswers++;
+                globalCorrectAnswers++;
+                document.getElementById('accuracyDisplay').innerText = `${globalCorrectAnswers} / ${EXERCISES_DATA.length}`;
+            } else {
+                htmlElement.classList.add('selected-wrong');
+                feedbackCard.className = 'feedback-card wrong';
+                feedbackHeader.innerText = "❌ Incorrecto";
+                feedbackBody.innerText = ex.feedbackWrong;
+                
+                // Mostrar cuál era la correcta
+                const correctIndex = ex.options.findIndex(o => o.isCorrect);
+                document.querySelectorAll('.option-item')[correctIndex].classList.add('show-correct');
+            }
+
+            // Actualizar barra al 100% de esta pregunta
+            const totalSteps = currentUnitExercises.length;
+            const percent = Math.round(((currentExIndex + 1) / totalSteps) * 100);
+            document.getElementById('workspaceProgressBar').style.width = `${percent}%`;
+
+            feedbackCard.style.display = 'block';
+            document.getElementById('btnNext').disabled = false;
+        };
+
+        document.getElementById('btnNext').addEventListener('click', () => {
+            currentExIndex++;
+            showQuestion();
+        });
+
+        // MODAL FINAL
+        function endUnit() {
+            document.getElementById('modalScoreText').innerText = `${correctAnswers} / ${currentUnitExercises.length}`;
+            document.getElementById('celebrationModal').classList.add('open');
+        }
+
+        window.cerrarModal = function() {
+            document.getElementById('celebrationModal').classList.remove('open');
+            switchView('curriculumView');
+        };
+
+        // INICIALIZACIÓN (Espera a que carguen los .js externos)
+        window.addEventListener('load', () => {
+            setTimeout(renderUnitsGrid, 100);
+        });
+
+    </script>
+</body>
+</html>
