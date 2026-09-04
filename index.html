@@ -6,7 +6,6 @@
     <title>Zapoteco Interactivo · Nivel 1 · Nivel 2 · Nivel 3 · Nivel 4</title>
     <meta name="description" content="Plataforma interactiva de libre acceso para el aprendizaje del Zapoteco de Chichicapan. 160 unidades pedagógicas y 800 ejercicios." />
     
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
@@ -240,15 +239,14 @@
 
     <main class="main-content container">
         
-        <!-- VISTA 1: MENÚ DE UNIDADES -->
         <section id="curriculumView" class="view-panel active">
             <div class="filter-controls">
                 <div class="level-toggles">
                     <button class="lvl-toggle-btn active" data-lvl="all">Todos</button>
-                    <button class="lvl-toggle-btn" data-lvl="Nivel 1">Nivel 1 (1-40)</button>
-                    <button class="lvl-toggle-btn" data-lvl="Nivel 2">Nivel 2 (41-80)</button>
-                    <button class="lvl-toggle-btn" data-lvl="Nivel 3">Nivel 3 (81-120)</button>
-                    <button class="lvl-toggle-btn" data-lvl="Nivel 4">Nivel 4 (121-160)</button>
+                    <button class="lvl-toggle-btn" data-lvl="A1">Nivel 1 (1-40)</button>
+                    <button class="lvl-toggle-btn" data-lvl="A2">Nivel 2 (41-80)</button>
+                    <button class="lvl-toggle-btn" data-lvl="B1">Nivel 3 (81-120)</button>
+                    <button class="lvl-toggle-btn" data-lvl="B2">Nivel 4 (121-160)</button>
                 </div>
                 <div class="search-box">
                     <span class="search-icon">🔍</span>
@@ -261,7 +259,6 @@
             </div>
         </section>
 
-        <!-- VISTA 2: ÁREA DE EJERCICIOS -->
         <section id="quizWorkspaceView" class="view-panel">
             <div class="exercise-card">
                 <div class="card-topbar">
@@ -299,7 +296,6 @@
             </div>
         </section>
 
-        <!-- VISTA 3: EXÁMENES -->
         <section id="examView" class="view-panel">
             <div class="about-card">
                 <div class="about-header">
@@ -308,7 +304,7 @@
                 </div>
                 <div class="about-grid">
                     <div class="about-item">
-                        <h3>⚡ Test Nivel !</h3>
+                        <h3>⚡ Test Nivel 1</h3>
                         <p>20 ejercicios aleatorios del Nivel 1.</p>
                         <button class="btn btn-primary" style="margin-top: 1rem;" onclick="startCustomExam('A1', 20)">Iniciar Test Nivel 1</button>
                     </div>
@@ -326,7 +322,6 @@
             </div>
         </section>
 
-        <!-- VISTA 4: ACERCA DE -->
         <section id="aboutView" class="view-panel">
             <div class="about-card">
                 <div class="about-header">
@@ -346,7 +341,6 @@
             </div>
         </section>
 
-        <!-- VISTA 5: RECURSOS Y ENLACES -->
         <section id="resourcesView" class="view-panel">
             <div class="about-card">
                 <div class="about-header">
@@ -379,7 +373,6 @@
 
     </main>
 
-    <!-- MODAL FINAL -->
     <div class="modal-overlay" id="celebrationModal">
         <div class="modal-card">
             <div class="modal-icon">🎉</div>
@@ -389,9 +382,6 @@
         </div>
     </div>
 
-    <!-- ======================================================= -->
-    <!-- 1. MOTOR ADAPTADOR PROTEGIDO                            -->
-    <!-- ======================================================= -->
     <script>
         const UNITS_META = [];
         const EXERCISES_DATA = [];
@@ -445,17 +435,11 @@
         }
     </script>
 
-    <!-- ======================================================= -->
-    <!-- 2. LLAMADA A TUS ARCHIVOS EXTERNOS DE BASE DE DATOS     -->
-    <!-- ======================================================= -->
     <script src="database_a1.js"></script>
     <script src="database_a2.js"></script>
     <script src="database_b1.js"></script>
     <script src="database_b2.js"></script>
 
-    <!-- ======================================================= -->
-    <!-- 3. LÓGICA VISUAL DE LA INTERFAZ                         -->
-    <!-- ======================================================= -->
     <script>
         // ESTADO DE LA APLICACIÓN
         let currentFilter = 'all';
@@ -466,6 +450,13 @@
         let globalCorrectAnswers = 0;
         let isAnswered = false;
         let isExamMode = false;
+
+        const levelNames = {
+            'A1': 'Nivel 1',
+            'A2': 'Nivel 2',
+            'B1': 'Nivel 3',
+            'B2': 'Nivel 4'
+        };
 
         // FUNCIONES DE INTERFAZ
         window.switchView = function(viewId) {
@@ -521,10 +512,12 @@
 
             grid.innerHTML = filteredUnits.map(u => {
                 const exCount = EXERCISES_DATA.filter(e => e.unitId === u.id).length;
+                const levelDisplay = levelNames[u.level] || u.level;
+
                 return `
                 <div class="unit-card level-${u.level.toLowerCase()}" onclick="startUnit(${u.id})">
                     <div class="unit-header">
-                        <span class="unit-tag">NIVEL ${u.level}</span>
+                        <span class="unit-tag">${levelDisplay.toUpperCase()}</span>
                     </div>
                     <h3 class="unit-title">${u.title}</h3>
                     <p class="unit-desc">${u.desc}</p>
@@ -547,119 +540,95 @@
             currentExIndex = 0;
             correctAnswers = 0;
 
-            document.getElementById('cardLevelTag').innerText = `NIVEL ${unit.level}`;
+            const levelDisplay = levelNames[unit.level] || unit.level;
+
+            document.getElementById('cardLevelTag').innerText = levelDisplay.toUpperCase();
             document.getElementById('cardUnitTitle').innerText = unit.title;
             
             switchView('quizWorkspaceView');
-            showQuestion();
+            loadCurrentExercise();
         };
 
-        window.startCustomExam = function(level, count) {
-            isExamMode = true;
-            let pool = EXERCISES_DATA;
+        function loadCurrentExercise() {
+            if (!currentUnitExercises || currentUnitExercises.length === 0) return;
             
-            if (level === 'A1') {
-                pool = EXERCISES_DATA.filter(e => e.unitId <= 40);
-            } else if (level === 'A2') {
-                pool = EXERCISES_DATA.filter(e => e.unitId > 40 && e.unitId <= 80);
-            } else if (level === 'B') {
-                pool = EXERCISES_DATA.filter(e => e.unitId > 80);
-            }
-
-            // Shuffle and slice
-            currentUnitExercises = pool.sort(() => 0.5 - Math.random()).slice(0, count);
-            currentExIndex = 0;
-            correctAnswers = 0;
-
-            document.getElementById('cardLevelTag').innerText = `EXAMEN`;
-            document.getElementById('cardUnitTitle').innerText = `Evaluación Aleatoria (${count} Preguntas)`;
-            
-            switchView('quizWorkspaceView');
-            showQuestion();
-        };
-
-        function showQuestion() {
-            if (currentExIndex >= currentUnitExercises.length) {
-                endUnit();
-                return;
-            }
-
             isAnswered = false;
-            const ex = currentUnitExercises[currentExIndex];
-            const currentStep = currentExIndex + 1;
-            const totalSteps = currentUnitExercises.length;
+            const exData = currentUnitExercises[currentExIndex];
+            
+            // Actualizar progreso
+            const total = currentUnitExercises.length;
+            const pct = Math.round(((currentExIndex) / total) * 100);
+            document.getElementById('workspaceProgressText').innerText = `Ejercicio ${currentExIndex + 1} de ${total}`;
+            document.getElementById('workspaceProgressBar').style.width = `${pct}%`;
 
-            document.getElementById('workspaceProgressText').innerText = `Ejercicio ${currentStep} de ${totalSteps}`;
-            const percent = Math.round(((currentStep - 1) / totalSteps) * 100);
-            document.getElementById('workspaceProgressBar').style.width = `${percent}%`;
-
-            document.getElementById('feedbackCard').style.display = 'none';
-            document.getElementById('btnNext').disabled = true;
-            document.getElementById('btnNext').innerText = (currentStep === totalSteps) ? "Finalizar ▶" : "Siguiente ▶";
-
-            document.getElementById('questionText').innerText = ex.question;
-            document.getElementById('optionsContainer').innerHTML = ex.options.map(opt => `
-                <div class="option-item" onclick="checkAnswer('${opt.id}', this)">
-                    <div class="option-key">${opt.id.toUpperCase()}</div>
-                    <div class="option-text">${opt.text}</div>
+            // Cargar pregunta
+            document.getElementById('questionText').innerText = exData.question;
+            
+            // Cargar opciones
+            const optsContainer = document.getElementById('optionsContainer');
+            optsContainer.innerHTML = exData.options.map((opt) => `
+                <div class="option-item" onclick="selectOption('${opt.id}')" data-id="${opt.id}">
+                    <span class="option-key">${opt.id.toUpperCase()}</span>
+                    <span class="option-text">${opt.text}</span>
                 </div>
             `).join('');
+
+            // Ocultar feedback y deshabilitar botón siguiente
+            document.getElementById('feedbackCard').className = 'feedback-card';
+            document.getElementById('btnNext').disabled = true;
         }
 
-        window.checkAnswer = function(selectedId, htmlElement) {
+        window.selectOption = function(optId) {
             if (isAnswered) return;
             isAnswered = true;
 
-            const ex = currentUnitExercises[currentExIndex];
-            const isCorrect = ex.options.find(o => o.id === selectedId).isCorrect;
+            const exData = currentUnitExercises[currentExIndex];
+            const selectedOpt = exData.options.find(o => o.id === optId);
+            const isCorrect = selectedOpt && selectedOpt.isCorrect;
 
-            document.querySelectorAll('.option-item').forEach(el => el.classList.add('disabled'));
+            const allOptEls = document.querySelectorAll('.option-item');
+            allOptEls.forEach(el => {
+                el.classList.add('disabled');
+                const id = el.getAttribute('data-id');
+                if (id === optId) {
+                    el.classList.add(isCorrect ? 'selected-correct' : 'selected-wrong');
+                } else if (exData.options.find(o => o.id === id && o.isCorrect)) {
+                    el.classList.add('show-correct');
+                }
+            });
 
-            const feedbackCard = document.getElementById('feedbackCard');
-            const feedbackHeader = document.getElementById('feedbackHeader');
-            const feedbackBody = document.getElementById('feedbackBody');
+            const fbCard = document.getElementById('feedbackCard');
+            const fbHeader = document.getElementById('feedbackHeader');
+            const fbBody = document.getElementById('feedbackBody');
 
             if (isCorrect) {
-                htmlElement.classList.add('selected-correct');
-                feedbackCard.className = 'feedback-card correct';
-                feedbackHeader.innerText = "✅ ¡Correcto!";
-                feedbackBody.innerText = ex.feedbackCorrect;
                 correctAnswers++;
-                if(!isExamMode) {
-                    globalCorrectAnswers++;
-                    document.getElementById('accuracyDisplay').innerText = `${globalCorrectAnswers} / 800`;
-                }
+                globalCorrectAnswers++;
+                fbCard.className = 'feedback-card correct';
+                fbHeader.innerText = '¡Excelente! Respuesta Correcta';
+                fbBody.innerText = exData.feedbackCorrect;
             } else {
-                htmlElement.classList.add('selected-wrong');
-                feedbackCard.className = 'feedback-card wrong';
-                feedbackHeader.innerText = "❌ Incorrecto";
-                feedbackBody.innerText = ex.feedbackWrong;
-                
-                // Mostrar cuál era la correcta
-                const correctIndex = ex.options.findIndex(o => o.isCorrect);
-                if (correctIndex !== -1) {
-                    document.querySelectorAll('.option-item')[correctIndex].classList.add('show-correct');
-                }
+                fbCard.className = 'feedback-card wrong';
+                fbHeader.innerText = 'Respuesta Incorrecta';
+                fbBody.innerText = exData.feedbackWrong;
             }
 
-            // Actualizar barra al 100% de esta pregunta
-            const totalSteps = currentUnitExercises.length;
-            const percent = Math.round(((currentExIndex + 1) / totalSteps) * 100);
-            document.getElementById('workspaceProgressBar').style.width = `${percent}%`;
-
-            feedbackCard.style.display = 'block';
+            document.getElementById('accuracyDisplay').innerText = `${globalCorrectAnswers} / 800`;
             document.getElementById('btnNext').disabled = false;
         };
 
         document.getElementById('btnNext').addEventListener('click', () => {
             currentExIndex++;
-            showQuestion();
+            if (currentExIndex < currentUnitExercises.length) {
+                loadCurrentExercise();
+            } else {
+                showCelebrationModal();
+            }
         });
 
-        // MODAL FINAL
-        function endUnit() {
-            document.getElementById('modalTitle').innerText = isExamMode ? "¡Examen Finalizado!" : "¡Unidad Completada!";
-            document.getElementById('modalScoreText').innerText = `${correctAnswers} / ${currentUnitExercises.length}`;
+        function showCelebrationModal() {
+            const total = currentUnitExercises.length;
+            document.getElementById('modalScoreText').innerText = `${correctAnswers} / ${total}`;
             document.getElementById('celebrationModal').classList.add('open');
         }
 
@@ -668,11 +637,40 @@
             switchView('curriculumView');
         };
 
-        // INICIALIZACIÓN (Espera a que carguen los .js externos)
-        window.addEventListener('load', () => {
-            setTimeout(renderUnitsGrid, 150);
-        });
+        // EXÁMENES
+        window.startCustomExam = function(levelPrefix, count) {
+            isExamMode = true;
+            let pool = EXERCISES_DATA;
+            
+            if (levelPrefix !== 'all') {
+                pool = EXERCISES_DATA.filter(e => {
+                    const unit = UNITS_META.find(u => u.id === e.unitId);
+                    return unit && unit.level.startsWith(levelPrefix);
+                });
+            }
 
+            if (pool.length === 0) {
+                alert("No hay ejercicios disponibles para este test.");
+                return;
+            }
+
+            // Mezclar
+            const shuffled = [...pool].sort(() => 0.5 - Math.random());
+            currentUnitExercises = shuffled.slice(0, Math.min(count, shuffled.length));
+            currentExIndex = 0;
+            correctAnswers = 0;
+
+            document.getElementById('cardLevelTag').innerText = 'EVALUACIÓN';
+            document.getElementById('cardUnitTitle').innerText = `Test de Diagnóstico (${currentUnitExercises.length} Preguntas)`;
+            
+            switchView('quizWorkspaceView');
+            loadCurrentExercise();
+        };
+
+        // INICIALIZACIÓN
+        document.addEventListener('DOMContentLoaded', () => {
+            renderUnitsGrid();
+        });
     </script>
 </body>
 </html>
